@@ -1,0 +1,17 @@
+backend/venv/
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+dist/
+.env.local
+.env.production
+.vite/
+*.pth
+*.pt
+*.bin
+.DS_Store
+Thumbs.db
+.idea/
