@@ -18,7 +18,6 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Copy app source
 COPY app/ ./app/
 COPY sgat_layoutlm_model.pth ./sgat_layoutlm_model.pth
-COPY .env.production ./.env 2>/dev/null || true
 
 # WeasyPrint GTK fix is already in the code (sys.modules mock in main.py)
 # Force PyTorch backend for docTR

@@ -12,8 +12,8 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:5173"
 
     class Config:
-        # Load .env in dev, .env.production in production if available. Railway injects env vars directly in production.
-        env_file = ".env" if os.getenv("ENVIRONMENT", "development") != "production" else ".env.production"
+        # Load .env in dev. Railway injects env vars directly in production.
+        env_file = ".env" if os.getenv("ENVIRONMENT", "development") != "production" else None
         env_file_encoding = "utf-8"
         extra = "ignore"
 
