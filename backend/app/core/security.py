@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from .config import settings
 from .database import get_db, User
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto", bcrypt__rounds=12)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 optional_oauth2 = OAuth2PasswordBearer(tokenUrl="/api/auth/login", auto_error=False)
 

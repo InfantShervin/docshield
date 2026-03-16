@@ -1,3 +1,19 @@
+# ── Windows / WeasyPrint GTK fix ──────────────────────────────────────────────
+# WeasyPrint (pulled in by python-doctr) needs GTK (libgobject-2.0-0.dll) at
+# import time, which doesn't exist on Windows and causes error 0x7e.
+# We mock it here BEFORE any other import so docTR loads cleanly.
+# DocShield never calls doctr.io.read_html(), so mocking is entirely safe.
+import sys as _sys
+from unittest.mock import MagicMock as _MM
+for _m in ["weasyprint", "weasyprint.fonts", "weasyprint.document",
+           "weasyprint.css", "weasyprint.svg", "weasyprint.html",
+           "weasyprint.formatting_structure", "weasyprint.stacking",
+           "weasyprint.layout", "weasyprint.draw", "weasyprint.text",
+           "weasyprint.text.ffi", "weasyprint.text.line_break"]:
+    if _m not in _sys.modules:
+        _sys.modules[_m] = _MM()
+# ──────────────────────────────────────────────────────────────────────────────
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware

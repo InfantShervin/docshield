@@ -1,0 +1,20 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+export const useAuthStore = create(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      setAuth: (user, token) => set({ user, token }),
+      clearAuth: () => set({ user: null, token: null }),
+    }),
+    { name: 'docshield-auth' }
+  )
+)
+
+export const useAnalysisStore = create((set) => ({
+  currentResult: null,
+  setResult: (result) => set({ currentResult: result }),
+  clearResult: () => set({ currentResult: null }),
+}))

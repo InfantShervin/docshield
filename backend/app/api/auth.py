@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..core.database import get_db, User
 from ..core.security import hash_password, verify_password, create_access_token, get_current_user
-from ..models.schemas import UserCreate, Token
+from ..models.schemas import UserCreate, UserLogin, Token
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 AVATAR_COLORS = ["#6366f1","#ec4899","#14b8a6","#f59e0b","#ef4444","#8b5cf6","#06b6d4","#10b981"]
@@ -25,7 +25,7 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-def login(user_data: UserCreate, db: Session = Depends(get_db)):
+def login(user_data: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user_data.email).first()
     if not user or not verify_password(user_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid email or password")

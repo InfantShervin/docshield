@@ -1,3 +1,4 @@
+import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
@@ -11,6 +12,9 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:5173"
 
     class Config:
-        env_file = ".env"
+        # Load .env in dev, .env.production in production if available. Railway injects env vars directly in production.
+        env_file = ".env" if os.getenv("ENVIRONMENT", "development") != "production" else ".env.production"
+        env_file_encoding = "utf-8"
+        extra = "ignore"
 
 settings = Settings()
