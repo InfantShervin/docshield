@@ -11,7 +11,7 @@ SENSITIVE_PATTERNS: Dict[str, tuple] = {
     "Voter ID":           (r"\b[A-Z]{3}[0-9]{7}\b", 82),
     "Driving Licence":    (r"\b[A-Z]{2}\d{2}[A-Z]{1,2}\d{4,11}\b", 80),
     "SSN (US)":           (r"\b\d{3}-\d{2}-\d{4}\b", 95),
-    "Credit/Debit Card":  (r"\b(?:\d[ \-]?){13,19}\b", 93),
+    "Credit/Debit Card":  (r"\b(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})\b", 93),
     "CVV":                (r"\bCVV\s*[:\-]?\s*\d{3,4}\b", 95, re.IGNORECASE),
     "IFSC Code":          (r"\b[A-Z]{4}0[A-Z0-9]{6}\b", 70),
     "Bank Account":       (r"\b(?:account|a/c)\s*(?:no|number)?\s*[:\-]?\s*\d{9,18}\b", 78, re.IGNORECASE),
@@ -73,6 +73,32 @@ def classify_text_sensitivity(text: str, raw_text: str = "", start_idx: int = -1
                 
     sensitivity = next((label for threshold, label in SENSITIVITY_THRESHOLDS if max_score >= threshold), "Very Low")
     return sensitivity, round(max_score / 100.0, 4), matched
+
+
+def find_sensitive_spans(raw_text: str) -> List[Dict]:
+    """Finds all occurrences of sensitive patterns in the full text."""
+    spans = []
+    for name, pattern_info in SENSITIVE_PATTERNS.items():
+        if len(pattern_info) == 3:
+            pattern, score, flags = pattern_info
+            matches = list(re.finditer(pattern, raw_text, flags))
+        else:
+            pattern, score = pattern_info
+            matches = list(re.finditer(pattern, raw_text))
+            
+        for match in matches:
+            m_start, m_end = match.span()
+            # Determine sensitivity
+            sensitivity = next((label for threshold, label in SENSITIVITY_THRESHOLDS if float(score) >= threshold), "Very Low")
+            spans.append({
+                "match_type": name,
+                "score": round(float(score) / 100.0, 4),
+                "sensitivity": sensitivity,
+                "start": m_start,
+                "end": m_end,
+                "text": match.group(0)
+            })
+    return spans
 
 
 def compute_exposure_score(entities: List[Dict]) -> Tuple[float, str, List[str], List[str]]:

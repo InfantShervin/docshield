@@ -61,6 +61,13 @@ def _rule_based_response(message: str, scan_data: Dict) -> str:
             return f"With a {level} risk level and score of {score:.1f}%, this document is relatively **safe to share**. Always double-check before sending to unknown parties."
         return f"⚠️ With a **{level}** risk level and score of {score:.1f}%, I would **NOT recommend sharing** this document without first redacting the highlighted fields."
 
+    if any(k in msg for k in ["why", "how", "reason", "false positive", "wrong", "incorrect", "but"]):
+        return (
+            "DocShield AI uses a combination of OCR (text extraction) and layout analysis to detect sensitive information.\n\n"
+            "If a field appears incorrect (for example, an Aadhaar number being flagged as a Credit Card, or vice versa), "
+            "it occurs when the text's length and format overlap with multiple detection rules. Verify the highlights manually, as OCR can sometimes merge adjacent digits or spaces."
+        )
+
     if any(k in msg for k in ["redact", "remove", "hide", "protect", "anonymize"]):
         types = list({w.split("—")[0].replace("🔴", "").replace("🟠", "").strip() for w in warnings})
         if types:

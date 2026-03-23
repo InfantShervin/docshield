@@ -10,7 +10,7 @@ from typing import List, Dict
 
 from ..models.sgat_model import SGAT, build_graph
 from ..services.ocr_service import run_ocr_on_image, run_ocr_on_pdf
-from ..services.exposure_service import classify_text_sensitivity, compute_exposure_score
+from ..services.exposure_service import find_sensitive_spans, compute_exposure_score
 from ..core.config import settings
 
 ID2LABEL = {0: "OTHER", 1: "KEY", 2: "VALUE", 3: "HEADER", 4: "QUESTION"}
@@ -126,8 +126,12 @@ async def analyze_document(
     while len(predicted_labels) < len(tokens):
         predicted_labels.append("OTHER")
 
+    sensitive_spans = find_sensitive_spans(raw_text)
+
     entities = []
     current_idx = 0
+    token_infos = []
+
     for i in range(min(len(tokens), len(predicted_labels))):
         text = tokens[i]
         label = predicted_labels[i]
@@ -139,14 +143,43 @@ async def analyze_document(
         end_idx = start_idx + len(text)
         current_idx = end_idx
         
-        sensitivity, risk_score, matched_types = classify_text_sensitivity(
-            text, raw_text=raw_text, start_idx=start_idx, end_idx=end_idx
-        )
-        entities.append({
+        token_infos.append({
             "text": text, "label": label, "bbox": bbox,
-            "sensitivity": sensitivity, "risk_score": risk_score,
-            "matched_types": matched_types,
+            "start": start_idx, "end": end_idx, "used": False
         })
+        
+    for span in sensitive_spans:
+        group_tokens = []
+        for t in token_infos:
+            if not t["used"] and max(t["start"], span["start"]) < min(t["end"], span["end"]):
+                group_tokens.append(t)
+                t["used"] = True
+                
+        if group_tokens:
+            min_x = min(t["bbox"][0] for t in group_tokens)
+            min_y = min(t["bbox"][1] for t in group_tokens)
+            max_x = max(t["bbox"][2] for t in group_tokens)
+            max_y = max(t["bbox"][3] for t in group_tokens)
+            
+            entities.append({
+                "text": span["text"],
+                "label": group_tokens[0]["label"],
+                "bbox": [min_x, min_y, max_x, max_y],
+                "sensitivity": span["sensitivity"],
+                "risk_score": span["score"],
+                "matched_types": [span["match_type"]],
+            })
+
+    for t in token_infos:
+        if not t["used"]:
+            entities.append({
+                "text": t["text"], "label": t["label"], "bbox": t["bbox"],
+                "sensitivity": "Very Low", "risk_score": 0.0,
+                "matched_types": [],
+            })
+
+    # Sort entities back to document order based on vertical bounding box
+    entities.sort(key=lambda e: (e["bbox"][1], e["bbox"][0]))
 
     exposure_score, risk_level, warnings, safe_fields = compute_exposure_score(entities)
     sensitive_count = sum(1 for e in entities if e["sensitivity"] in ("Critical", "High", "Medium"))
