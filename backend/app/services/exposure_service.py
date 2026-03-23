@@ -41,19 +41,36 @@ RISK_LEVEL_THRESHOLDS = [
 ]
 
 
-def classify_text_sensitivity(text: str) -> Tuple[str, float, List[str]]:
+def classify_text_sensitivity(text: str, raw_text: str = "", start_idx: int = -1, end_idx: int = -1) -> Tuple[str, float, List[str]]:
     max_score = 0.0
     matched: List[str] = []
+    
+    # If we have the full text and context indices, run patterns on full text
+    search_text = raw_text if raw_text and start_idx >= 0 and end_idx >= 0 else text
+    
     for name, pattern_info in SENSITIVE_PATTERNS.items():
         if len(pattern_info) == 3:
             pattern, score, flags = pattern_info
-            found = re.search(pattern, text, flags)
+            # Use finditer to get all matches
+            matches = list(re.finditer(pattern, search_text, flags))
         else:
             pattern, score = pattern_info
-            found = re.search(pattern, text)
-        if found:
-            matched.append(name)
-            max_score = max(max_score, float(score))
+            matches = list(re.finditer(pattern, search_text))
+            
+        for match in matches:
+            # If we are searching full text, check if this match overlaps with our token
+            if search_text == raw_text:
+                m_start, m_end = match.span()
+                # Overlap condition: max(m_start, start_idx) < min(m_end, end_idx)
+                if max(m_start, start_idx) < min(m_end, end_idx):
+                    if name not in matched:
+                        matched.append(name)
+                    max_score = max(max_score, float(score))
+            else:
+                if name not in matched:
+                    matched.append(name)
+                max_score = max(max_score, float(score))
+                
     sensitivity = next((label for threshold, label in SENSITIVITY_THRESHOLDS if max_score >= threshold), "Very Low")
     return sensitivity, round(max_score / 100.0, 4), matched
 

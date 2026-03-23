@@ -127,11 +127,21 @@ async def analyze_document(
         predicted_labels.append("OTHER")
 
     entities = []
+    current_idx = 0
     for i in range(min(len(tokens), len(predicted_labels))):
         text = tokens[i]
         label = predicted_labels[i]
         bbox = bboxes[i] if i < len(bboxes) else [0, 0, 0, 0]
-        sensitivity, risk_score, matched_types = classify_text_sensitivity(text)
+        
+        start_idx = raw_text.find(text, current_idx)
+        if start_idx == -1:
+            start_idx = current_idx  # Fallback
+        end_idx = start_idx + len(text)
+        current_idx = end_idx
+        
+        sensitivity, risk_score, matched_types = classify_text_sensitivity(
+            text, raw_text=raw_text, start_idx=start_idx, end_idx=end_idx
+        )
         entities.append({
             "text": text, "label": label, "bbox": bbox,
             "sensitivity": sensitivity, "risk_score": risk_score,

@@ -9,10 +9,6 @@ dist/
 .env.local
 .env.production
 .vite/
-*.pth
-!backend/sgat_layoutlm_model.pth
-*.pt
-*.bin
 .DS_Store
 Thumbs.db
 .idea/
