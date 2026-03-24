@@ -1,6 +1,6 @@
 # DocShield
 
-DocShield is a document analysis and exposure detection system.
+DocShield is a document analysis and exposure detection system powered by a **Supabase (PostgreSQL)** backend for robust data management and high-performance scaling.
 
 ## Screenshots
 
