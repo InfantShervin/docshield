@@ -2,6 +2,20 @@
 
 DocShield is a document analysis and exposure detection system.
 
+## Screenshots
+
+| Home Page | Login Page |
+| --- | --- |
+| ![Home Page](./home.png) | ![Login Page](./login.png) |
+
+| Analyze Page | Results Page |
+| --- | --- |
+| ![Analyze Page](./analyze.png) | ![Results Page](./results.png) |
+
+| History Page |
+| --- |
+| ![History Page](./history.png) |
+
 ## Running Locally
 
 Follow these instructions to run the application on your computer after downloading or cloning the GitHub repository.
