@@ -21,15 +21,15 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         extra = "ignore"
 
-# Strictly safe environment loading: fail fast if required config is missing.
+# If we're missing something critical, we just can't start the app.
 try:
     settings = Settings()
 except ValidationError as e:
-    print("\n[!] CRITICAL: Configuration Error")
-    print("Required environment variables are missing or invalid.")
-    print("Ensure your .env file exists and contains DATABASE_URL and SECRET_KEY.")
+    print("\n[!] Heads up: Configuration error.")
+    print("Looks like your .env file is missing something major (like DATABASE_URL or SECRET_KEY).")
+    print("Check out the error details below or use .env.example to set things up.")
     print(f"Details: {e}\n")
     sys.exit(1)
 except Exception as e:
-    print(f"\n[!] UNEXPECTED ERROR during config initialization: {e}\n")
+    print(f"\n[!] Something went wrong while loading config: {e}\n")
     sys.exit(1)

@@ -108,6 +108,8 @@ def pdf_to_images(pdf_bytes: bytes) -> List[Image.Image]:
         )
         return images
     except Exception as e:
+        # Oops, something went wrong with the PDF to Image conversion.
+        # Fall back to text extraction if we can.
         print(f"[PDF->IMG ERROR] {e}")
         return []
 
