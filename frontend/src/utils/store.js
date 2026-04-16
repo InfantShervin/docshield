@@ -9,7 +9,7 @@ export const useAuthStore = create(
       setAuth: (user, token) => set({ user, token }),
       clearAuth: () => set({ user: null, token: null }),
     }),
-    { name: 'docshield-auth' }
+    { name: 'privacy-scanner-auth' }
   )
 )
 

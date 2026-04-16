@@ -8,10 +8,10 @@ import { useAnalysisStore } from '../utils/store'
 import toast from 'react-hot-toast'
 
 const STEPS = [
-  { icon:<Eye size={16}/>, label:'OCR Extraction', desc:'Extracting text with docTR neural OCR' },
-  { icon:<Brain size={16}/>, label:'LayoutLMv3', desc:'Generating multimodal document embeddings' },
-  { icon:<Zap size={16}/>, label:'SGAT Analysis', desc:'Running spatial graph attention network' },
-  { icon:<Shield size={16}/>, label:'Exposure Scoring', desc:'Classifying sensitivity and computing score' },
+  { icon:<Eye size={16}/>, label:'Scanning Text', desc:'Extracting content from the image/PDF' },
+  { icon:<Brain size={16}/>, label:'Understanding Layout', desc:'Identifying where information is located' },
+  { icon:<Zap size={16}/>, label:'Looking for IDs', desc:'Running patterns to find sensitive fields' },
+  { icon:<Shield size={16}/>, label:'Scoring Exposure', desc:'Calculating your final risk level' },
 ]
 
 export default function Analyze() {
@@ -82,7 +82,7 @@ export default function Analyze() {
               <button onClick={handleAnalyze} disabled={!file || loading} style={{ marginTop:20, width:'100%', height:52, background:!file||loading?'rgba(99,102,241,0.3)':'linear-gradient(135deg,#6366f1,#8b5cf6)', border:'none', borderRadius:12, color:'white', fontSize:16, fontWeight:600, cursor:!file||loading?'default':'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:10, fontFamily:'Syne,sans-serif', boxShadow:file&&!loading?'0 0 32px rgba(99,102,241,0.4)':'none', transition:'all 0.3s' }}>
                 {loading
                   ? <><Loader size={18} style={{ animation:'spin 1s linear infinite' }}/> Analyzing… ({progress}%)</>
-                  : <><Shield size={18}/> Run Privacy Analysis</>}
+                  : <><Shield size={18}/> Scan for Sensitive Data</>}
               </button>
             </div>
 
@@ -118,9 +118,9 @@ export default function Analyze() {
             <div style={{ background:'var(--bg-card)', border:'1px solid var(--border)', borderRadius:16, padding:20 }}>
               <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:14 }}>
                 <div style={{ width:28, height:28, borderRadius:8, background:'rgba(99,102,241,0.15)', display:'flex', alignItems:'center', justifyContent:'center' }}><Brain size={14} color="#818cf8"/></div>
-                <span style={{ fontSize:13, fontWeight:600 }}>Model Pipeline</span>
+                <span style={{ fontSize:13, fontWeight:600 }}>How it works</span>
               </div>
-              {[['OCR Engine','docTR (neural OCR)'],['Embeddings','LayoutLMv3-Large'],['Classifier','SGAT (your model)'],['Accuracy','95.03%'],['F1 Score','94.80%']].map(([k,v]) => (
+              {[['Text Engine','docTR OCR'],['Model','LayoutLMv3'],['Classification','Pattern-based'],['Accuracy','High (95%+)'],['Speed','~1-5 seconds']].map(([k,v]) => (
                 <div key={k} style={{ display:'flex', justifyContent:'space-between', padding:'6px 0', borderBottom:'1px solid var(--border)', fontSize:13 }}>
                   <span style={{ color:'var(--text-muted)' }}>{k}</span>
                   <span style={{ color:'var(--text-primary)', fontWeight:500 }}>{v}</span>

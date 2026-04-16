@@ -8,12 +8,13 @@ export default function Home() {
   const { user } = useAuthStore()
 
   const features = [
-    { icon:<Brain size={20}/>, title:'LayoutLMv3 + SGAT', desc:'Your published research model — trained on FUNSD, CORD, OCR datasets. 95.03% accuracy.', color:'#818cf8' },
+    { icon:<Brain size={20}/>, title:'Smart Scanning', desc:'Identifying where sensitive fields are located in your documents.', color:'#818cf8' },
     { icon:<Eye size={20}/>, title:'Universal Input', desc:'Scanned documents, printed forms, digital images, and PDFs — any format, any quality.', color:'#34d399' },
-    { icon:<Zap size={20}/>, title:'Instant Exposure Score', desc:'AI sensitivity classification with a 0–100 risk score and plain-language warnings.', color:'#f59e0b' },
-    { icon:<Database size={20}/>, title:'AI Chat Assistant', desc:'Ask anything — the assistant knows your exact document and explains every risk.', color:'#60a5fa' },
+    { icon:<Zap size={20}/>, title:'Instant Risk Score', desc:'Clear sensitivity classification with a 0–100 risk score and plain-language warnings.', color:'#f59e0b' },
+    { icon:<Database size={20}/>, title:'Privacy Assistant', desc:'Ask anything — the assistant knows your document and explains every risk.', color:'#60a5fa' },
     { icon:<Lock size={20}/>, title:'Scan History', desc:'Every analysis saved. Review, compare, and track document security over time.', color:'#f472b6' },
     { icon:<FileSearch size={20}/>, title:'30+ PII Patterns', desc:'Aadhaar, PAN, passport, medical, bank data, passwords — all detected automatically.', color:'#fb923c' },
+  ]
   ]
 
   const stats = [
@@ -31,7 +32,7 @@ export default function Home() {
         <motion.div
           initial={{ opacity:0, scale:0.8 }} animate={{ opacity:1, scale:1 }} transition={{ delay:0.1, type:'spring' }}
           style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(99,102,241,0.1)', border:'1px solid rgba(99,102,241,0.25)', borderRadius:99, padding:'6px 16px', marginBottom:32, fontSize:13, color:'#818cf8' }}>
-          <Shield size={13}/> Built on LayoutLMv3 + Spatial Graph Attention Network
+          <Shield size={13}/> Scan your documents for sensitive data leaks
         </motion.div>
 
         <motion.h1
@@ -46,7 +47,7 @@ export default function Home() {
         <motion.p
           initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}
           style={{ fontSize:18, color:'var(--text-secondary)', maxWidth:560, margin:'0 auto 48px', lineHeight:1.7 }}>
-          Upload any scanned, printed, or digital document. Our AI extracts every piece of sensitive information, scores your exposure, and explains exactly what's at risk.
+          Upload any scanned, printed, or digital document. I'll extract sensitive information, score your exposure, and explain exactly what's at risk.
         </motion.p>
 
         <motion.div
@@ -87,7 +88,7 @@ export default function Home() {
           Everything you need
         </h2>
         <p style={{ textAlign:'center', color:'var(--text-secondary)', marginBottom:56 }}>
-          Powered by your own published research
+          Designed for privacy and peace of mind
         </p>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:20 }}>
           {features.map(({ icon, title, desc, color }, i) => (
@@ -113,7 +114,7 @@ export default function Home() {
             Start protecting your documents
           </h2>
           <p style={{ color:'var(--text-secondary)', marginBottom:32 }}>
-            Free, instant, powered by published AI research. No credit card required.
+            Free, instant document scanning. No credit card required.
           </p>
           <button
             onClick={() => navigate(user ? '/analyze' : '/register')}

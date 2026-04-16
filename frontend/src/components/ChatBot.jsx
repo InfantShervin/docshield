@@ -10,7 +10,7 @@ const QUICK = ['What sensitive data was found?','Is it safe to share this docume
 export default function ChatBot({ scanId, scanData }) {
   const [messages, setMessages] = useState([{
     role:'assistant',
-    content:`Hi! I'm DocShield AI 🛡️\n\nI've analyzed **"${scanData?.filename}"** — exposure score **${scanData?.exposure_score?.toFixed(1)}%**, risk level **${scanData?.risk_level}**.\n\nAsk me anything about the detected sensitive information or how to protect your data.`,
+    content:`Hi! I'm your privacy assistant 🛡️\n\nI've looked at **"${scanData?.filename}"**. The risk level is **${scanData?.risk_level}** (score: **${scanData?.exposure_score?.toFixed(1)}%**).\n\nAsk me anything about what was found or how to hide your data.`,
   }])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -45,8 +45,8 @@ export default function ChatBot({ scanId, scanData }) {
           <Sparkles size={15} color="white"/>
         </div>
         <div>
-          <p style={{fontWeight:600,fontSize:14,lineHeight:1}}>DocShield AI</p>
-          <p style={{fontSize:11,color:'var(--text-muted)'}}>Privacy analysis assistant</p>
+          <p style={{fontWeight:600,fontSize:14,lineHeight:1}}>Privacy Assistant</p>
+          <p style={{fontSize:11,color:'var(--text-muted)'}}>Helping you secure your data</p>
         </div>
         <div style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:4,fontSize:11,color:'#10b981'}}>
           <div style={{width:6,height:6,borderRadius:'50%',background:'currentColor'}}/> Online

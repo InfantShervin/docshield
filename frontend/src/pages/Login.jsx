@@ -25,7 +25,7 @@ function AuthForm({ mode }) {
         ? await authAPI.login({ email:form.email, password:form.password })
         : await authAPI.register({ email:form.email, password:form.password, name:form.name })
       setAuth({ id:data.user_id, name:data.user_name, email:data.user_email, avatar_color:'#6366f1' }, data.access_token)
-      toast.success(isLogin ? `Welcome back, ${data.user_name}!` : `Welcome to DocShield, ${data.user_name}!`)
+      toast.success(isLogin ? `Welcome back, ${data.user_name}!` : `Account created! Welcome, ${data.user_name}!`)
       navigate('/analyze')
     } catch (err) {
       const detail = err.response?.data?.detail
@@ -52,7 +52,7 @@ function AuthForm({ mode }) {
           </div>
           <h1 style={{ fontFamily:'Syne,sans-serif', fontSize:24, fontWeight:700 }}>{isLogin ? 'Welcome back' : 'Create account'}</h1>
           <p style={{ color:'var(--text-secondary)', fontSize:14, marginTop:6 }}>
-            {isLogin ? 'Sign in to your DocShield account' : 'Start analyzing your documents for free'}
+            {isLogin ? 'Sign in to your account' : 'Start scanning your documents for free'}
           </p>
         </div>
 

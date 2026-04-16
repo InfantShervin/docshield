@@ -13,9 +13,9 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell, ResponsiveContainer, RadarC
 import toast from 'react-hot-toast'
 
 const TABS = [
-  { id:'overview', label:'Overview', icon:<BarChart2 size={15}/> },
-  { id:'entities', label:'Entity Table', icon:<List size={15}/> },
-  { id:'chat', label:'AI Chat', icon:<MessageSquare size={15}/> },
+  { id:'overview', label:'Summary', icon:<BarChart2 size={15}/> },
+  { id:'entities', label:'Found Fields', icon:<List size={15}/> },
+  { id:'chat', label:'Assistant', icon:<MessageSquare size={15}/> },
 ]
 const SENS_COLORS = { Critical:'#ef4444', High:'#f97316', Medium:'#f59e0b', Low:'#10b981', 'Very Low':'#6b7280' }
 
@@ -181,7 +181,7 @@ export default function Results() {
                 </div>
 
                 <div style={{ background:'var(--bg-card)', border:'1px solid var(--border)', borderRadius:16, padding:24 }}>
-                  <h3 style={{ fontFamily:'Syne,sans-serif', fontSize:15, fontWeight:600, marginBottom:20 }}>Entity Labels (SGAT Output)</h3>
+                  <h3 style={{ fontFamily:'Syne,sans-serif', fontSize:15, fontWeight:600, marginBottom:20 }}>How it was found</h3>
                   <ResponsiveContainer width="100%" height={200}>
                     <RadarChart data={labelDist}>
                       <PolarGrid stroke="rgba(255,255,255,0.08)"/>
@@ -231,8 +231,8 @@ export default function Results() {
                     ))}
                   </div>
                   <div style={{ background:'rgba(99,102,241,0.06)', border:'1px solid rgba(99,102,241,0.15)', borderRadius:14, padding:16 }}>
-                    <p style={{ fontSize:13, fontWeight:500, color:'#818cf8', marginBottom:8 }}><Info size={13} style={{ marginRight:5 }}/>About DocShield AI</p>
-                    <p style={{ fontSize:12, color:'var(--text-secondary)', lineHeight:1.6 }}>This assistant has full access to your document analysis and can answer any question about detected sensitive data, applicable laws, and recommended actions.</p>
+                    <p style={{ fontSize:13, fontWeight:500, color:'#818cf8', marginBottom:8 }}><Info size={13} style={{ marginRight:5 }}/>About the Assistant</p>
+                    <p style={{ fontSize:12, color:'var(--text-secondary)', lineHeight:1.6 }}>This assistant has access to the analysis results and can help you understand the risks or suggest redactions for any sensitive fields found.</p>
                   </div>
                 </div>
               </div>

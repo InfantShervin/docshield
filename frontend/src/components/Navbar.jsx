@@ -26,7 +26,7 @@ export default function Navbar() {
             <Shield size={18} color="white" />
           </div>
           <span style={{ fontFamily:'Syne,sans-serif', fontWeight:700, fontSize:18, color:'#f0f2f8' }}>
-            Doc<span style={{ color:'#818cf8' }}>Shield</span>
+            Privacy<span style={{ color:'#818cf8' }}>Scanner</span>
           </span>
         </Link>
 
