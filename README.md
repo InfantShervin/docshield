@@ -1,103 +1,33 @@
-# DocShield
+# PrivacyScanner 🛡️
 
-DocShield is a document analysis and exposure detection system powered by a **Supabase (PostgreSQL)** backend for robust data management and high-performance scaling.
+I built this scanner to help developers and privacy-conscious folks scan their documents for leaked PII (Personally Identifiable Information). It uses a custom model and a Supabase backend to identify things like Aadhaar numbers, PAN cards, emails, and credit card info before you accidentally share them.
 
-## Screenshots
+### What it does
+- **Smart Scanning**: Finds IDs, card numbers, and secret keys in images and PDFs.
+- **Risk Scoring**: Gives you a clear 0-100 score so you know how "exposed" a document is.
+- **Helpful Context**: Explains *why* something was flagged and what regulations (like GDPR) might apply.
+- **Privacy Assistant**: A chat interface to ask questions about the analysis.
 
-| Home Page | Login Page |
-| --- | --- |
-| ![Home Page](./home.png) | ![Login Page](./login.png) |
+### Running it locally
 
-| Analyze Page | Results Page |
-| --- | --- |
-| ![Analyze Page](./analyze.png) | ![Results Page](./results.png) |
+You'll need Python 3.8+ and Node.js.
 
-| History Page |
-| --- |
-| ![History Page](./history.png) |
+#### 1. Backend Setup
+1. Head into the `backend` folder: `cd backend`.
+2. Grab the dependencies: `pip install -r requirements.txt`.
+   - *Note*: You'll need **Poppler** installed on your system for PDF scanning to work.
+3. Set up your `.env` file (see `.env.example`).
+4. Fire it up: `uvicorn app.main:app --reload`.
 
-## Running Locally
+#### 2. Frontend Setup
+1. In a new terminal, go to `frontend`.
+2. Install everything: `npm install`.
+3. Start the dev server: `npm run dev`.
 
-Follow these instructions to run the application on your computer after downloading or cloning the GitHub repository.
+### Why I built this
+Most "AI" document scanners are corporate products that want your data. I wanted something that I could run locally to check my own files before uploading them anywhere. It's not perfect, but it's a lot better than manual checking.
 
-### Prerequisites
-1. **Python 3.8+**
-2. **Node.js (v14+ or latest LTS)**
-3. **Poppler**: (Required for PDF processing)
-   - *Windows*: You can use the `poppler.zip` included in this repository. Extract it and add the `bin` directory to your system's PATH environment variable.
-   - *macOS*: `brew install poppler`
-   - *Linux (Ubuntu/Debian)*: `sudo apt-get install poppler-utils`
-
-### 1. Backend Setup
-
-The backend is built with Python and FastAPI. The pre-trained model (`sgat_layoutlm_model.pth`) is already included in the `backend/` directory of this repository!
-
-1. Open a terminal and navigate to the `backend` folder:
-   ```bash
-   cd backend
-   ```
-2. Create and activate a virtual environment:
-   ```bash
-   # Windows
-   python -m venv venv
-   venv\Scripts\activate
-
-   # macOS/Linux
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-4. Run the backend server:
-   ```bash
-   uvicorn app.main:app --reload
-   ```
-   The backend API will be available at `http://localhost:8000`.
-
-### 2. Frontend Setup
-
-The frontend is a React application powered by Vite.
-
-1. Open a **new** terminal window and navigate to the `frontend` folder:
-   ```bash
-   cd frontend
-   ```
-2. Install the necessary Node packages:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   The frontend will be accessible at the local URL provided in the terminal (usually `http://localhost:5173`).
-
-
----
-
-## Future Deployment Guide
-
-If you decide to deploy the application to the web in the future, follow these general guidelines. *(Note: Deployment configurations have been intentionally removed from this repository to ensure a clean local-first environment).*
-
-### Deploying the Backend
-To deploy the Python backend, you typically use a platform like Render, Railway, or Heroku.
-1. Create a `Dockerfile` in the `/backend` folder. Example:
-   ```dockerfile
-   FROM python:3.9-slim
-   # Install poppler
-   RUN apt-get update && apt-get install -y poppler-utils
-   WORKDIR /app
-   COPY requirements.txt .
-   RUN pip install -r requirements.txt
-   COPY . .
-   CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-   ```
-2. Ensure you have a `.dockerignore` file so unnecessary files are not uploaded.
-3. Push the code to GitHub and connect it to your hosting provider, ensuring the environment variables matches what your application needs.
-
-### Deploying the Frontend
-To deploy the React dashboard, you can use Vercel, Netlify, or Cloudflare Pages.
-1. Make sure your API calls point to the deployed backend URL instead of `localhost`. Usually, you manage this using an `.env.production` file (e.g., `VITE_API_URL=https://your-backend-url.com`).
-2. Connect your GitHub repository to Vercel or Netlify. The default Vite build settings (Build Command: `npm run build`, Output Directory: `dist`) will automatically work on these platforms.
+### Roadmap
+- [ ] Add more regional ID patterns (looking for contributors!)
+- [ ] Batch processing for entire folders
+- [ ] Better PDF text layer extraction (without OCR when possible)
