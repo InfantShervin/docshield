@@ -1,4 +1,4 @@
-# PrivacyScanner 🛡️
+# Docshield 🛡️
 
 I built this scanner to help developers and privacy-conscious folks scan their documents for leaked PII (Personally Identifiable Information). It uses a custom model and a Supabase backend to identify things like Aadhaar numbers, PAN cards, emails, and credit card info before you accidentally share them.
 
