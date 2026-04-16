@@ -1,6 +1,5 @@
-"""
-Exposure Engine — detects 30+ PII patterns and scores document risk.
-"""
+# Pattern matching engine for finding IDs, card numbers, and other PII.
+# TODO: Add more regional IDs for better coverage.
 import re
 from typing import List, Dict, Tuple
 
@@ -76,7 +75,7 @@ def classify_text_sensitivity(text: str, raw_text: str = "", start_idx: int = -1
 
 
 def find_sensitive_spans(raw_text: str) -> List[Dict]:
-    """Finds all occurrences of sensitive patterns in the full text."""
+    # Finds all occurrences of sensitive patterns in the full text.
     spans = []
     for name, pattern_info in SENSITIVE_PATTERNS.items():
         if len(pattern_info) == 3:

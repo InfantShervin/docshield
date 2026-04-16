@@ -2,7 +2,7 @@
 # WeasyPrint (pulled in by python-doctr) needs GTK (libgobject-2.0-0.dll) at
 # import time, which doesn't exist on Windows and causes error 0x7e.
 # We mock it here BEFORE any other import so docTR loads cleanly.
-# DocShield never calls doctr.io.read_html(), so mocking is entirely safe.
+# The scanner doesn't use doctr.io.read_html(), so mocking is entirely safe.
 import sys as _sys
 from unittest.mock import MagicMock as _MM
 for _m in ["weasyprint", "weasyprint.fonts", "weasyprint.document",
@@ -25,14 +25,14 @@ from .api import auth, analyze, chat, history
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("[STARTUP] Creating database tables…")
+    # Just making sure tables are there
     create_tables()
-    print("[STARTUP] DocShield API ready.")
+    print("--- PrivacyScanner is up and running ---")
     yield
-    print("[SHUTDOWN] Server stopped.")
+    print("Shutting down...")
 
 
-app = FastAPI(title="DocShield API", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="PrivacyScanner API", version="1.0.0", lifespan=lifespan)
 
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(
@@ -49,7 +49,7 @@ app.include_router(history.router)
 
 @app.get("/")
 def root():
-    return {"message": "DocShield API v1.0", "status": "running"}
+    return {"message": "Scanner API v1.0", "status": "running"}
 
 @app.get("/health")
 def health():

@@ -5,21 +5,19 @@ Uses OpenAI GPT-4o-mini if key is set, otherwise uses smart rule-based fallback.
 from typing import List, Dict
 from ..core.config import settings
 
-SYSTEM_PROMPT = """You are DocShield AI, an expert privacy and document security analyst.
-You have analyzed a document and extracted this information:
+SYSTEM_PROMPT = """You are a helpful privacy assistant. 
+You are looking at a document analysis and answering questions for the user. 
+Try to be helpful, informal, and point out exactly what sensitive stuff was found.
 
---- DOCUMENT ANALYSIS ---
+--- ANALYSIS DATA ---
 {analysis_context}
---- END ANALYSIS ---
+--- END ---
 
-Answer the user's questions about:
-- What sensitive information was found and why it is risky
-- How to protect or redact specific fields
-- What laws apply (GDPR, DPDP Act India, HIPAA, PCI-DSS)
-- How much risk each piece of data poses
-- Recommendations for secure handling
-
-Be specific, helpful, and refer to actual data found above."""
+Help the user understand:
+- Why certain fields are risky.
+- How they can hide/redact them.
+- What rules (GDPR, HIPAA, etc.) might apply.
+- General advice on sharing the file safely."""
 
 
 def _build_context(scan_data: Dict) -> str:
@@ -53,9 +51,9 @@ def _rule_based_response(message: str, scan_data: Dict) -> str:
 
     if any(k in msg for k in ["why", "how", "reason", "false positive", "wrong", "incorrect", "but"]):
         return (
-            "DocShield AI uses a combination of OCR (text extraction) and layout analysis to detect sensitive information.\n\n"
-            "If a field appears incorrect (for example, an Aadhaar number being flagged as a Credit Card, or vice versa), "
-            "it occurs when the text's length and format overlap with multiple detection rules. Verify the highlights manually, as OCR can sometimes merge adjacent digits or spaces."
+            "The scanner uses a mix of OCR and pattern matching to find stuff.\n\n"
+            "Sometimes it might misidentify a field (like confusing a PAN card for a Credit Card) if the formats look similar. "
+            "It's always worth double-checking the highlights yourself."
         )
 
     if any(k in msg for k in ["warn", "danger", "sensitive", "found", "detect", "what"]):
@@ -82,8 +80,8 @@ def _rule_based_response(message: str, scan_data: Dict) -> str:
                 "• **PCI-DSS** — covers credit card numbers and CVV\n"
                 "Consult a legal professional for advice specific to your situation.")
 
-    return (f"I'm DocShield AI 🛡️ Your document has a **{level}** risk level with an exposure score of **{score:.1f}%**.\n\n"
-            "Ask me about:\n• What sensitive data was found\n• Whether it's safe to share\n• How to redact sensitive fields\n• What legal risks apply")
+    return (f"Hi! I'm your privacy assistant 🛡️. Your document has a **{level}** risk level (score: **{score:.1f}%**).\n\n"
+            "You can ask me about:\n• What I found\n• If it's safe to share\n• How to redact it\n• Legal risks")
 
 
 async def get_chat_response(message: str, scan_data: Dict, history: List[Dict]) -> str:

@@ -5,10 +5,8 @@ from typing import List, Tuple
 from PIL import Image, ImageEnhance, ImageFilter
 import numpy as np
 
-# ── Windows / WeasyPrint GTK fix ──────────────────────────────────────────────
-# docTR depends on WeasyPrint which crashes on Windows (GTK DLL missing).
-# We mock WeasyPrint before docTR is ever imported so it loads cleanly.
-# DocShield never uses doctr.io.read_html(), so this mock is completely safe.
+# Mocking WeasyPrint because it breaks on Windows due to missing GTK DLLs.
+# We don't actually need its HTML reading features anyway.
 from unittest.mock import MagicMock as _MM
 for _m in ["weasyprint", "weasyprint.fonts", "weasyprint.document",
            "weasyprint.css", "weasyprint.svg", "weasyprint.html",
@@ -46,7 +44,7 @@ def normalize_bbox(box: List[int], width: int, height: int) -> List[int]:
 
 
 def run_doctr_ocr(image: Image.Image) -> Tuple[List[str], List[List[int]]]:
-    """Run docTR OCR — pure neural network, no Tesseract needed."""
+    # Running docTR for neural OCR - much better than Tesseract
     import os
     os.environ["USE_TORCH"] = "1"
     from doctr.models import ocr_predictor
@@ -138,7 +136,7 @@ def extract_pdf_text_direct(pdf_bytes: bytes) -> Tuple[List[str], List[List[int]
 
 
 def run_ocr_on_pdf(pdf_bytes: bytes) -> Tuple[List[str], List[List[int]]]:
-    """Try image OCR first, fall back to direct text extraction."""
+    # Try images first, then direct text as a fallback
     print("[PDF] Converting pages to images...")
     images = pdf_to_images(pdf_bytes)
     if images:
