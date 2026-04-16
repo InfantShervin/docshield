@@ -1,14 +1,27 @@
-backend/venv/
-node_modules/
+# Secrets and environment
+.env
+.env.*
+!.env.example
+secrets_backup.txt
+*.pem
+*.key
+*.jks
+*.p12
+
+# Python
 __pycache__/
 *.pyc
 *.pyo
-.env
+backend/venv/
 *.egg-info/
+
+# Node/Frontend
+node_modules/
 dist/
-.env.local
-.env.production
 .vite/
+
+# System and IDE
 .DS_Store
 Thumbs.db
 .idea/
+desktop.ini
